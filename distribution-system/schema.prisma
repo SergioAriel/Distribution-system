@@ -1,0 +1,164 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Client {
+  id              String        @id @default(uuid())
+  nameContact     String
+  RS              String
+  email           String
+  bussines        String
+  phone           Int
+  permission      String
+  regAFIP         String
+  PC              Int
+  deliveryAddress String
+  employees       Employees[]
+  shoppingCart    ShoppingCart?
+  orderSale       OrderSale[]
+}
+
+model Employees {
+  id         String   @id @default(uuid())
+  userName   String   @unique
+  firstName  String
+  lastName   String
+  DNI        Int
+  phone      Int
+  permission String
+  type       String
+  clients    Client[] @relation(fields: [clientID], references: [id])
+  clientID   String
+  employees  Truck?   @relation(fields: [truckID], references: [id])
+  truckID    String?
+}
+
+model Truck {
+  id            String          @id @default(uuid())
+  type          String?
+  capacity      Int?
+  high          Int?
+  large         Int?
+  width         Int?
+  employees     Employees[]
+  deliveryOrder DeliveryOrder[]
+}
+
+model Product {
+  id             String           @id @default(uuid())
+  name           String
+  price          Int
+  iva            Int
+  discount       Int
+  brand          String
+  availability   Boolean
+  description    String?
+  stock          Int
+  images         String[]
+  weight         Int?
+  high           Int?
+  large          Int?
+  width          Int?
+  category       Category[]
+  purchaseDetail PurchaseDetail[]
+  cartDetail     CartDetail[]
+  saleDetail     SaleDetail[]
+}
+
+model Category {
+  id      String    @id @default(uuid())
+  product Product[]
+}
+
+model Provider {
+  id            String          @id @default(uuid())
+  RS            String
+  nameContact   String
+  email         String
+  business      String
+  phone         Int
+  regAFIP       String
+  adress        String
+  CP            Int
+  purchaseOrder PurchaseOrder[]
+}
+
+model PurchaseOrder {
+  id             String           @id @default(uuid())
+  provider       Provider         @relation(fields: [providerID], references: [id])
+  providerID     String
+  purchaseDetail PurchaseDetail[]
+  paymentType    String?
+  state          String
+  date           String
+  received       Boolean
+  invoice        String[]
+  amount         Int
+
+}
+
+model PurchaseDetail {
+  id              String        @id @default(uuid())
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderID], references: [id])
+  purchaseOrderID String
+  product         Product       @relation(fields: [productID], references: [id])
+  productID       String
+  quantities      Int
+}
+
+model OrderSale {
+  id                String         @id @default(uuid())
+  saleDetail        SaleDetail[]
+  client            Client         @relation(fields: [clientID], references: [id])
+  clientID          String
+  state             Boolean
+  amount            Int
+  date              String
+  paymentType       String?
+  withdrawalProduct Boolean
+  invoice           String[]
+  deliveryOrder     DeliveryOrder?
+}
+
+model SaleDetail {
+  id          String    @id @default(uuid())
+  orderSale   OrderSale @relation(fields: [orderSaleID], references: [id])
+  orderSaleID String
+  product     Product   @relation(fields: [productID], references: [id])
+  productID   String
+  quantities  Int
+}
+
+model DeliveryOrder {
+  id          String    @id @default(uuid())
+  orderSale   OrderSale @relation(fields: [orderSaleID], references: [id])
+  orderSaleID String
+  date        String
+  truck       Truck     @relation(fields: [truckID], references: [id])
+  truckID     String
+  state       String
+}
+
+model ShoppingCart {
+  id         String       @id @default(uuid())
+  cartDetail CartDetail[]
+  client     Client       @relation(fields: [clientID], references: [id])
+  clientID   String
+  amount     Int
+  newDate    String
+  state      Boolean
+}
+
+model CartDetail {
+  id             String       @id @default(uuid())
+  shoppingCart   ShoppingCart @relation(fields: [shoppingCartID], references: [id])
+  shoppingCartID String
+  product        Product      @relation(fields: [productID], references: [id])
+  productID      String
+  quantities     Int
+}
