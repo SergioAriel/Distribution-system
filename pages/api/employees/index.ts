@@ -1,28 +1,15 @@
 import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Octokit } from "@octokit/core";
-
-
-const octokit = new Octokit({
-  auth: "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",
-});
-
-
 
 const prisma = new PrismaClient();
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
-export default async function Client(req: NextApiRequest, res: NextApiResponse) {
+export default async function Product(req: NextApiRequest, res: NextApiResponse) {
+  let client;
+  let image;
   switch (req.method) {
     case "POST":
-    let client = await prisma.client.create({
+      client = await prisma.client.create({
         data: {
-          id: "string",
           nameContact: "asd",
           RS: "asd",
           email: "asdasd",
@@ -31,16 +18,20 @@ export default async function Client(req: NextApiRequest, res: NextApiResponse) 
           permission: "asda",
           regAFIP: "asdsd",
           PC: 165,
+          images: image,
           deliveryAddress: "asda",
-          images: [],
+          employees: {
+            create:[
+
+            ] 
+          }
         },
-      }
-      );
+      });
+      console.log(client);
       res.status(200).json(client);
-      console.log(client)
       return;
     case "GET":
-      await prisma.client.findMany();
+      client = await prisma.client.findMany();
       console.log(client);
       res.status(200).json(client);
       return;

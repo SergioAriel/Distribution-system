@@ -1,19 +1,29 @@
+import { useRef, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import axios from "axios";
 import styles from "../styles/Home.module.css";
-import { Product } from '../interfaces/types'
+import loco from "../public/vercel.svg";
 
 export default function Home(): JSX.Element {
+  const refImage = useRef();
+  const [image, setImage] = useState([]);
+
   const createContact = async () => {
-    try {
-      const response = await fetch("/api/client", {
-        method: "GET",
-      });
-      const res = await response.json();
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
+    //utilizar cloudinary para subir imagenes.
+    // console.log(image);
+    // const formData = new FormData();
+    // image.map((img) => {
+    //   formData.append("image", img);
+    // });
+    // const imagen = await fetch("/api/client", {
+    //   method: "POST",
+    //   body: formData,
+    //   headers: {
+    //     "Content-Type": " multipart/form-data",
+    //   },
+    // });
+    // console.log(formData);
   };
 
   return (
@@ -26,6 +36,7 @@ export default function Home(): JSX.Element {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
+          <input type="file" name="Subir Foro" id="" ref={refImage} />
           <button onClick={createContact}>Create</button>
         </h1>
 
@@ -73,7 +84,7 @@ export default function Home(): JSX.Element {
         >
           Powered by{" "}
           <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+            <Image src={loco} alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>

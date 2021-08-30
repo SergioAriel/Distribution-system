@@ -18,6 +18,7 @@ model Client {
   regAFIP         String
   PC              Int
   deliveryAddress String
+  images          Bytes[]
   employees       Employees[]
   shoppingCart    ShoppingCart?
   orderSale       OrderSale[]

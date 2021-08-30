@@ -4,7 +4,6 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default async function ClientID(req, res) {
-  console.log(req.query.id);
   let client;
   switch (req.method) {
     case "GET":
@@ -15,5 +14,6 @@ export default async function ClientID(req, res) {
       });
       res.status(200).json(client);
     case "PUT":
+      
   }
 }

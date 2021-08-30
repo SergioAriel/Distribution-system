@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { PrismaClient } from "@prisma/client";
 import type { NextApiRequest, NextApiResponse } from 'next'
 
@@ -6,6 +5,7 @@ const prisma = new PrismaClient();
 
 export default async function Product(req: NextApiRequest, res: NextApiResponse) {
   let client;
+  let image;
   switch (req.method) {
     case "POST":
       client = await prisma.client.create({
@@ -19,6 +19,7 @@ export default async function Product(req: NextApiRequest, res: NextApiResponse)
           regAFIP: "asdsd",
           PC: 165,
           deliveryAddress: "asda",
+          images: image,
           employees: {
             create:[
 

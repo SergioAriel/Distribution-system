@@ -1,29 +1,38 @@
-import * as actionType from "../action_types/actionTypes";
-import { Actions } from "./clientActions";
-import { Store } from "./interfaceClient";
+import * as actionType from "./actionTypes";
+import { Actions, GetAllClients } from "./clientActions";
 
-let client = {
-  id:               "",
-  nameContact:      "",
-  RS:               "",
-  email:            "",
-  bussines:         "",
-  phone:            0,
-  permission:       "",
-  regAFIP:          "",
-  PC:               0,
-  deliveryAddress:  "",
+type InitialStateType = {
+  allClients: any[],
+  client: {}
 }
-
-
 
 const InitialState = {
   allClients: [],
-  client: client,
+  client: {},
 };
 
-function clientReducer(state: Store = InitialState, actions: Actions) {
+function clientReducer(state = InitialState, actions: Actions): InitialStateType {
+  switch (actions.type){
+    case actionType.GET_ALLCLIENT:
+      return {
+        ...state,
+        allClients: actions.payload
+      }
+    case actionType.GET_CLIENT:
+      return {
+        ...state,
+        client: actions.payload
+      }
+    case actionType.UPDATE_CLIENT:
+      return{
+        allClients: state.allClients.map( (client) =>
+          (client.id === actions.payload.id) ? actions.payload.client : client
+        ),
+        client: {}
+      }
+    default:
       return state;
+  }
 }
 
 
